@@ -10,6 +10,9 @@ const nextConfig = {
      
     ],
   },
+  env:{
+    NEXT_PUBLIC_WIX_CLIENT_ID: "ec0bbf0b-3023-462a-a0f3-08d7418bedce"
+  }
 };
 
 export default nextConfig;

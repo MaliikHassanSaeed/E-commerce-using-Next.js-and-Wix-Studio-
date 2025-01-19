@@ -10,7 +10,7 @@ import { ReactNode } from "react";
 import { createContext } from "react";
 
 const refreshToken=JSON.parse(Cookies.get("refreshToken") || "{}")
-
+console.log("env var in file", process.env.NEXT_PUBLIC_WIX_CLIENT_ID)
 const wixClient = createClient({
     modules: {
       products,
