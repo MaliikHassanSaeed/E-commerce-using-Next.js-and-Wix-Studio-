@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Image from 'next/image';
 import Filter from '../component/Filter';
 import ProductList from '../component/ProductList';
-const Listpage = () => {
+import { wixClientServer } from '@/lib/wixClientServer';
+const Listpage = async ({searchParams}:{searchParams:any}) => {
+
+const wixClient = await wixClientServer()
+
+  const cat = await wixClient.collections.getCollectionBySlug(searchParams.cat || "all-products");
+  
+  const categoryID=process.env["FEATURED_PRODUCTS_CATEGORY_ID"];
+  console.log("page ~ catgeoryID:",categoryID)
   return (
     <div  className="  px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative">
       {/* COMPAIGN */}
@@ -19,7 +27,10 @@ const Listpage = () => {
       <Filter />
       {/* PRODUCTS */}
       <h1 className="mt-12 text-xl font-semibold">Smartphones for you!</h1>
-      <ProductList  />
+      <Suspense fallback={"loading..."}>
+      <ProductList categoryId= { cat.collection?._id || "categoryID!"} 
+      searchParams={searchParams} />
+      </Suspense>
     </div>
   )
 }

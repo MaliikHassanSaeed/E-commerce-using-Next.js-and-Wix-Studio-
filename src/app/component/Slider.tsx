@@ -17,7 +17,7 @@ const slides=[
         id:2,
         title:  "Top Deals on Popular Brands",
         description:"Stay future-ready with the latest 5G-enabled smartphones.",
-        img:"/vivo-v40.jpg",
+        img:"/vivo-V40-image-1.jpg",
         url:"/",
         bg: "bg-gradient-to-r from-pink-50 to-blue-50",
 
@@ -26,7 +26,7 @@ const slides=[
         id:3, 
         title:  "New Arrivals! Top-Rated by Customers ",
         description:" Explore smartphones with long-lasting battery life, perfect for those on the go.",
-        img:"/TECNO-CAMON-30-1-750x375.jpg",
+        img:"/camon 30 1.jpg",
         url:"/",
         bg: "bg-gradient-to-r from-blue-50 to-yellow-50",
 
@@ -34,17 +34,17 @@ const slides=[
 ]
 const Slider = () => {
     const [current,setcurrent] =useState(0);
-    // const slideRef = useRef(current);
+    const slideRef = useRef(current);
 
-    // useEffect(() => {
-    //     slideRef.current = current; 
+    useEffect(() => {
+        slideRef.current = current; 
 
-    //     const interval = setInterval(() => {
-    //         setcurrent(prev => (prev === slides.length - 1 ? 0 : prev + 1));
-    //     }, 3000);
+        const interval = setInterval(() => {
+            setcurrent(prev => (prev === slides.length - 1 ? 0 : prev + 1));
+        }, 3000);
 
-    //     return () => clearInterval(interval); 
-    // }, [current]);
+        return () => clearInterval(interval); 
+    }, [current]);
 
 
 
