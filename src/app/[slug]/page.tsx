@@ -18,7 +18,7 @@ const products = await wixClient.products
 .find();
 
 if(!products.items[0]){
-  return notFound()
+  return notFound() 
 }
 
 const product= products.items[0]

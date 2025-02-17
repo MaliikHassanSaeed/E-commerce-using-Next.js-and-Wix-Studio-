@@ -27,8 +27,9 @@ console.log(res.items[0].price)
     <div className=' mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap'>
     {res.items.map((product:products.Product)=>(
  
-      <Link href={"/"+product.slug} className='w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]'>
-        key={product._id}
+      <Link href={"/"+product.slug} className='w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]'
+      key={product._id}>
+        
       <div className="relative w-full h-80">
       <Image src={product.media?.mainMedia?.image?.url || "/product.png"} 
       alt="" 
