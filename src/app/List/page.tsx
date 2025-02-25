@@ -26,7 +26,7 @@ const wixClient = await wixClientServer()
       {/* FILTER */}
       <Filter />
       {/* PRODUCTS */}
-      <h1 className="mt-12 text-xl font-semibold">Smartphones for you!</h1>
+      <h1 className="mt-12 text-xl font-semibold">{cat?.collection?.name} for you!</h1>
       <Suspense fallback={"loading..."}>
       <ProductList categoryId= { cat.collection?._id || "categoryID!"} 
       searchParams={searchParams} />

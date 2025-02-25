@@ -50,12 +50,13 @@ console.log(product.productOptions)
       )}
         
       <div className="h-[2px] bg-gray-100"/>
-      {product.variants && product.productOptions && (<CustomizeProduct 
+      {product.variants && product.productOptions  ? (<CustomizeProduct 
       productId = {product._id!} 
       variants={product.variants} 
       productOptions={product.productOptions} />
-      )}
-      <Add />
+      ):(
+      <Add productId= {product._id} variantId="0000000-00000-0-000000-00000000000" stockNumber={product.stock?.quantity || 0} />
+    )}
       <div className="h-[2px] bg-gray-100"/>
        {product.additionalInfoSections?.map((section:any)=>(
 
