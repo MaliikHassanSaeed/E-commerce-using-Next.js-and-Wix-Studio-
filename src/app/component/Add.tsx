@@ -34,9 +34,14 @@ const handleQuantity = (type: "i" | "d") => {
             {quantity}
             <button className="cursor-pointer text-xl" onClick={()=>handleQuantity("i")}>+ </button>
         </div>
+        {stockNumber< 1 ? 
+        (<div className="text-xs">
+          Product is out of Stock
+          </div>
+        ): (
         <div className="text-xs">
         Only <span className="text-orange-500">{stockNumber} items</span> left! <br />{"Don't"} miss it 
-        </div>
+        </div>)}
         </div>  
       <button className="w-36 text-sm rounded-3xl ring-1 ring-[#F35C7A] text-[#F35C7A] py-2 px-2 hover:bg-[#F35C7A] hover:text-white disabled:cursor-not-allowed disabled:bg-pink-200 disabled:text-white disabled:ring-none">Add to Cart</button>
       </div>  
