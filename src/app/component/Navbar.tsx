@@ -1,9 +1,13 @@
+"use client"
 import Link from 'next/link';
 import React from 'react';
 import Menu from './Menu';
 import Image from 'next/image';
 import Searchbar from'./Searchbar'
-import Navicons from './Navicons';
+import dynamic from 'next/dynamic';
+// import Navicons from './Navicons';
+
+const Navicons= dynamic(()=>import("./Navicons"),{ssr:false})
 
 const Navbar = () => {
   return (

@@ -1,4 +1,5 @@
 "use client"
+import { useWixClient } from '@/hooks/useWixClient';
 import React, { useState } from 'react'
 
 const Add = ({
@@ -23,6 +24,24 @@ const handleQuantity = (type: "i" | "d") => {
     }
 };
 
+const wixClient = useWixClient()
+
+const addItem= async ()=>{
+  const response = await wixClient.currentCart.addToCurrentCart({
+    lineItems:[
+      {
+        catalogReference:{
+          appId:process.env.NEXT_PUBLIC_WIX_APP_ID!,
+          catalogItemId:productId,
+          ...(variantId && {options:{variantId}})
+        },
+        quantity: stockNumber,
+      }
+    ]
+  })
+}
+
+
 
   return (
     <div className="flex flex-col gap-4">
@@ -43,7 +62,7 @@ const handleQuantity = (type: "i" | "d") => {
         Only <span className="text-orange-500">{stockNumber} items</span> left! <br />{"Don't"} miss it 
         </div>)}
         </div>  
-      <button className="w-36 text-sm rounded-3xl ring-1 ring-[#F35C7A] text-[#F35C7A] py-2 px-2 hover:bg-[#F35C7A] hover:text-white disabled:cursor-not-allowed disabled:bg-pink-200 disabled:text-white disabled:ring-none">Add to Cart</button>
+      <button onClick={addItem} className="w-36 text-sm rounded-3xl ring-1 ring-[#F35C7A] text-[#F35C7A] py-2 px-2 hover:bg-[#F35C7A] hover:text-white disabled:cursor-not-allowed disabled:bg-pink-200 disabled:text-white disabled:ring-none">Add to Cart</button>
       </div>  
     </div>
       
