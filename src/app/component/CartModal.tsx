@@ -1,23 +1,41 @@
 "use client";
-import React, { useEffect } from "react";
 import Image from "next/image";
-import { useWixClient } from "@/hooks/useWixClient";
 import { useCartStore } from "@/hooks/useCartStore";
 import {media as wixMedia} from "@wix/sdk"
+import { useWixClient } from "@/hooks/useWixClient";
+import { currentCart } from "@wix/ecom";
 
 const CartModal = () => {
-  const wixClient = useWixClient();
-  const { cart, getCart } = useCartStore();
 
-  useEffect(() => {
-    getCart(wixClient);
-  }, [wixClient, getCart]);
+  const wixClient= useWixClient()
+  const { cart, isLoading,removeItem } = useCartStore();
 
-  console.log(cart);
+  const handleCheckout = async ()=>{
+try{
+    const checkout = await currentCart.createCheckoutFromCurrentCart({
+      channelType:currentCart.ChannelType.WEB,
+    });
+
+    const {redirectSession} = await wixClient.redirects.createRedirectSession({
+      ecomCheckout:{checkoutId:checkout.checkoutId},
+      callbacks:{
+        postFlowUrl:window.location.origin,
+        thankYouPageUrl:`${window.location.origin}/success`
+      }
+    });
+
+
+    if(redirectSession?.fullUrl){
+      window.location.href = redirectSession.fullUrl
+    }
+  }catch(err){
+    console.log(err)
+  }
+  }
 
   return (
     <div className="w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20">
-      {!cart ? (
+      { !cart.lineItems ? (
         <div>Cart is empty</div>
       ) : (
         <>
@@ -33,7 +51,8 @@ const CartModal = () => {
                     {/* TITLE */}
                     <div className="flex items-center justify-between gap-8">
                       <h3 className="font-semibold">{item.productName?.original}</h3>
-                      <div className="p-1 bg-gray-50 rounded-sm">{item.price?.amount}</div>
+                      <div className="p-1 bg-gray-50 rounded-sm flex items-center gap-2">
+                        {item.quantity && item.quantity >1 && <div className="text-xs text-green-500">{item.quantity} x </div>}{item.price?.amount}</div>
                     </div>
                     {/* DESCRIPTION */}
                     <div className="text-sm text-gray-500">{item.availability?.status}</div>
@@ -41,7 +60,9 @@ const CartModal = () => {
                   {/* BOTTOM */}
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">{item.quantity}</span>
-                    <span className="text-blue-500">Remove</span>
+                    <span className="text-blue-500"
+                    style={{cursor: isLoading? "not allowed" : "pointer"}}
+                    onClick={()=>removeItem(wixClient, item._id!)}>Remove</span>
                   </div>
                 </div>
               </div>
@@ -52,12 +73,17 @@ const CartModal = () => {
           <div>
             <div className="flex items-center justify-between font-semibold">
               <span>Subtotal</span>
-              <span>$897</span>
+              <span>${cart.subtotal.amount}</span>
             </div>
-            <p className="text-gray-500 text-sm mt-2 mb-4">Lorem ipsum, dolor sit amet consectetur</p>
+            <p className="text-gray-500 text-sm mt-2 mb-4">Shipping and taxes calculated at checkout</p>
             <div className="flex justify-between text-sm">
               <button className="rounded-md py-3 px-4 ring-1 ring-gray-300">View Cart</button>
-              <button className="rounded-md py-3 px-4 bg-black text-white">Check Out</button>
+              <button className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75"
+               disabled={isLoading}
+               onClick={handleCheckout}
+               >
+                Check Out
+                </button>
             </div>
           </div>
         </>
